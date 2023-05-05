@@ -1,0 +1,22 @@
+@import '../../vendor/filament/filament/dist/app.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-primary-500, .bg-primary-600, .hover\:bg-primary-500:hover {
+    background-color: #1E55B3;
+}
+.text-primary-500, .text-primary-600 {
+    color: #1E55B3;
+}
+
+.filament-sidebar-header:before {
+    --tw-gradient-from: #e5e7eb;
+    --tw-gradient-to: rgba(229,231,235,0);
+    --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to);
+    --tw-gradient-to: rgba(251,191,36,0);
+    --tw-gradient-stops: var(--tw-gradient-from), #1e55b3,var(--tw-gradient-to);
+    --tw-gradient-to: #e5e7eb;
+    background-image: linear-gradient(to right,var(--tw-gradient-stops));
+}
