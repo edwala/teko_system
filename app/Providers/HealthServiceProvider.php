@@ -25,7 +25,7 @@ class HealthServiceProvider extends ServiceProvider
             CpuLoadCheck::new()
                 ->failWhenLoadIsHigherInTheLast5Minutes(2.0)
                 ->failWhenLoadIsHigherInTheLast15Minutes(1.5),
-            PingCheck::new()->url(env('APP_URL')),
+            //PingCheck::new()->url(env('APP_URL')),
             OptimizedAppCheck::new(),
         ]);
     }
