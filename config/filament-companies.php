@@ -81,8 +81,8 @@ return [
         Features::accountDeletion(),
         //Features::createAccountOnFirstLogin(),
         // Features::generateMissingEmails(),
-        Features::rememberSession(),
-        Features::providerAvatars(),
+        //Features::rememberSession(),
+        //Features::providerAvatars(),
     ],
 
     /*
