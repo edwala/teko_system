@@ -19,6 +19,13 @@ class Service extends Model
 
     protected $searchableFields = ['*'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new CompanyScope());
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
