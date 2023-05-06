@@ -89,7 +89,7 @@ return [
     |
     */
 
-    'middleware' => config('filament.middleware.base'),
+    'middleware' => ['web'],
 
     /*
     |--------------------------------------------------------------------------

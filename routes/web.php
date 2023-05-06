@@ -190,3 +190,11 @@ Route::middleware([
 ])->group(function () {
 
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('filament-companies.auth_session'),
+    'verified'
+])->group(function () {
+
+});
