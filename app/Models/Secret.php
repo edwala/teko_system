@@ -16,9 +16,7 @@ class Secret extends Model implements \OwenIt\Auditing\Contracts\Auditable
     use SoftDeletes;
     use Auditable;
 
-    protected $protected = [
-
-    ];
+    protected $fillable = ['company_id', 'name', 'description', 'secret'];
 
     protected $searchableFields = ['*'];
 
