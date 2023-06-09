@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FileController;
@@ -134,13 +135,19 @@ Route::prefix('/')
             ];
             $notes = implode(";", $notes);
 
+            $now = Carbon::parse(now());
+            $dueDate = Carbon::parse($inv->due_date);
+
+            $diffInDays = $now->diffInDays($dueDate);
+
                 $invoice = Invoice::make('Faktura')
                     ->series(date('Y'))
                     ->sequence(date('md') . $recordID)
                     ->serialNumberFormat('{SERIES}{SEQUENCE}')
                     ->seller($seller)
                     ->buyer($customer)
-                    ->date(now())
+                    ->date($now)
+                    ->payUntilDays($diffInDays + 1)
                     ->dateFormat('d. m. Y')
                     ->currencySymbol('Kč')
                     ->currencyCode('CZK')

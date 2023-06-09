@@ -291,7 +291,7 @@
 
                     @if($invoice->getDate())
                         <p class="buyer-code">
-                            {{ __('invoices::invoice.due') }}: {{ $invoice->getDate() }}
+                            {{ __('invoices::invoice.due') }}: {{ $invoice->getPayUntilDate() }}
                         </p>
                     @endif
                 </td>
@@ -418,15 +418,39 @@
             </p>
         @endif
 
-        <!--
-        <p>
-            https://api.paylibo.com/paylibo/generator/czech/image?accountNumber={{ $invoice->seller->methods['account'] }}&bankCode=5500&amount={{ $invoice->total_amount }}&currency=CZK&vs={{ $invoice->getSerialNumber() }}&message=FOND%20HUMANITY%20CCK
-        </p>
-        -->
-        <!--<img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('Make me into an QrCode!')) !!} ">-->
-        <img height="200" src="https://api.paylibo.com/paylibo/generator/czech/image?accountNumber={{ $invoice->seller->methods['account'] }}&bankCode={{ $invoice->seller->methods['bank_code'] }}&amount={{ $invoice->total_amount }}&currency=CZK&vs={{ $invoice->getSerialNumber() }}&message={{ $invoice->seller->name }} {{ $invoice->getSerialNumber() }}">
+        @php
+
+            $endpoint = "https://api.paylibo.com/paylibo/generator/czech/image";
+                $client = new \GuzzleHttp\Client();
+
+                try {
+                $response = $client->request('GET', $endpoint, ['query' => [
+                    'accountNumber' => $invoice->seller->methods['account'],
+                    'bankCode' => $invoice->seller->methods['bank_code'],
+                    'amount' => $invoice->total_amount,
+                    'currency' => 'CZK',
+                    'vs' => $invoice->getSerialNumber(),
+                    'message' => $invoice->seller->name,
+                ]]);
+
+                //return $content = json_decode($response->getBody(), true);
+                //return $statusCode = $response->getStatusCode();
+                $content = $response->getBody();
+
+                @endphp
+
+        <img height="200" type="image/png" src="data:image/png;base64, @php echo base64_encode($content) @endphp">
+        <small><a href="https://api.paylibo.com/paylibo/generator/czech/image?accountNumber={{ $invoice->seller->methods['account'] }}&bankCode={{ $invoice->seller->methods['bank_code'] }}&amount={{ $invoice->total_amount }}&currency=CZK&vs={{ $invoice->getSerialNumber() }}&message={{ $invoice->seller->name }} {{ $invoice->getSerialNumber() }}">QR CODE LINK</a></small>
+                @php
+                } catch (\GuzzleHttp\Exception\ClientException $e) {
+                    $response = $e->getResponse();
+                    $responseBodyAsString = $response->getBody()->getContents();
+                    echo $responseBodyAsString;
+                }
 
 
+
+        @endphp
 
 
         <script type="text/php">
