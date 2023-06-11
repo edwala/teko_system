@@ -29,8 +29,8 @@ return new class extends Migration
             $table->boolean('is_printed')->default(false);
             $table->timestamp('printed_at')->nullable();
 
-            $table->timestamp('datum_vystaveni');
-            $table->timestamp('datum_zdanitelneho_plneni');
+            $table->timestamp('datum_vystaveni')->nullable();
+            $table->timestamp('datum_zdanitelneho_plneni')->nullable();
         });
     }
 
