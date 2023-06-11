@@ -24,10 +24,21 @@ class UpdateCompanyName implements UpdatesCompanyNames
 
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'back_code' => ['required', 'int'],
+            'account' => ['required', 'int'],
+            'billing_address' => ['required', 'string', 'max:255'],
+            'tax_id' => ['required', 'string'],
+            'vat_id' => ['required', 'string'],
         ])->validateWithBag('updateCompanyName');
 
         $company->forceFill([
             'name' => $input['name'],
+            'back_code' => $input['back_code'],
+            'account' => $input['account'],
+            'billing_address' => $input['billing_address'],
+            'tax_id' => $input['tax_id'],
+            'vat_id' => $input['vat_id'],
+
         ])->save();
     }
 }

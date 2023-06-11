@@ -24,7 +24,7 @@ return [
     */
 
     'mini' => [
-        'isMiniCalendarEnabled' => true,
+        'isMiniCalendarEnabled' => false,
         'isDayViewHidden' => false,
         'isNextMeetingViewHidden' => false,
     ],
@@ -62,14 +62,14 @@ return [
 
     'pages' => [
         'timex' => \Buildix\Timex\Pages\Timex::class,
-        'slug' => 'timex',
-        'group' => 'timex',
+        'slug' => 'calendar',
+        'group' => 'Calendar',
         'sort' => 0,
-        'shouldRegisterNavigation' => false,
+        'shouldRegisterNavigation' => true,
         'enablePolicy' => false,
         'modalWidth' => 'xl',
         'icon' => [
-            'static' => true,
+            'static' => false,
             'timex' => 'timex-timex',
             'day' => 'timex-day-'
         ],

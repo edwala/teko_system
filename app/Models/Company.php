@@ -30,7 +30,10 @@ class Company extends FilamentCompaniesCompany
         'name',
         'personal_company',
         'account',
-        'bank_code'
+        'bank_code',
+        'billing_address',
+        'tax_id',
+        'vat_id',
     ];
 
     /**

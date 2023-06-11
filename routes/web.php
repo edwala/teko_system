@@ -99,7 +99,7 @@ Route::prefix('/')
                 ]);
 
                 $seller = new Party([
-                    'name' => $inv->company->company_name,
+                    'name' => $inv->company->name,
                     'custom_fields' => [
                         'Adresa' => $inv->company->billing_address,
                         'IČO' => $inv->company->tax_id,
