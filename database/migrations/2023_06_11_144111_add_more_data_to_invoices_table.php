@@ -42,7 +42,24 @@ return new class extends Migration
     public function down()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            //
+            $table->removeColumn('is_paid');
+            $table->removeColumn('paid_at');
+            $table->removeColumn('is_sent');
+            $table->removeColumn('sent_at');
+            $table->removeColumn('is_reminded');
+            $table->removeColumn('reminded_at');
+            $table->removeColumn('is_overdue');
+            $table->removeColumn('overdue_at');
+            $table->removeColumn('is_cancelled');
+            $table->removeColumn('cancelled_at');
+            $table->removeColumn('is_archived');
+            $table->removeColumn('archived_at');
+            $table->removeColumn('is_printed');
+            $table->removeColumn('printed_at');
+
+            $table->removeColumn('datum_vystaveni');
+            $table->removeColumn('datum_zdanitelneho_plneni');
+
         });
     }
 };
