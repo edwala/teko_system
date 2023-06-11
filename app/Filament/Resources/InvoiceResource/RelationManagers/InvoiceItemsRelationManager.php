@@ -2,8 +2,12 @@
 
 namespace App\Filament\Resources\InvoiceResource\RelationManagers;
 
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Contracts\HasRelationshipTable;
 use Filament\Resources\{Form, Table};
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -12,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\BelongsToSelect;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Resources\RelationManagers\RelationManager;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class InvoiceItemsRelationManager extends RelationManager
 {
@@ -52,6 +58,7 @@ class InvoiceItemsRelationManager extends RelationManager
                         'lg' => 12,
                     ]),
 
+                /*
                 TextInput::make('total_cost')
                     ->rules(['numeric'])
                     ->numeric()
@@ -61,11 +68,13 @@ class InvoiceItemsRelationManager extends RelationManager
                         'md' => 12,
                         'lg' => 12,
                     ]),
+                */
 
                 TextInput::make('vat')
                     ->rules(['numeric'])
                     ->numeric()
                     ->placeholder('Vat')
+                    ->default('21')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
@@ -79,12 +88,13 @@ class InvoiceItemsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('invoice.name')->limit(50),
+                //Tables\Columns\TextColumn::make('invoice.name')->limit(50),
                 Tables\Columns\TextColumn::make('name')->limit(50),
                 Tables\Columns\TextColumn::make('item_cost'),
                 Tables\Columns\TextColumn::make('count'),
                 Tables\Columns\TextColumn::make('total_cost'),
-                Tables\Columns\TextColumn::make('vat'),
+                Tables\Columns\TextColumn::make('vat')
+                ->label('VAT Rate'),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -123,11 +133,29 @@ class InvoiceItemsRelationManager extends RelationManager
                     'name'
                 ),
             ])
-            ->headerActions([Tables\Actions\CreateAction::make()])
+            ->headerActions([
+                //Tables\Actions\CreateAction::make()
+                CreateAction::make()
+                    ->using(function (HasRelationshipTable $livewire, array $data): Builder|Model|Relation {
+                        //dd($data);
+                        //$model = static::getModel()::create($data);
+                        return $livewire->getRelationship()->create(
+                            [
+                                //'invoice_id' => $model->id,
+                                'name' => $data['name'],
+                                'item_cost' => $data['item_cost'],
+                                'count' => $data['count'],
+                                'total_cost' => ($data['count'] * $data['item_cost'] * ($data['vat'] / 100)) + ($data['count'] * $data['item_cost']),
+                                'vat' => $data['vat'],
+                            ]
+                        );
+                    })
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([Tables\Actions\DeleteBulkAction::make()]);
     }

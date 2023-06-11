@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\InvoiceResource\Pages;
 
+use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use Filament\Resources\Pages\CreateRecord;
@@ -15,6 +16,9 @@ class CreateInvoice extends CreateRecord
     public function mutateFormDataBeforeCreate(array $data): array
     {
         $data['company_id'] = Auth::user()->current_company_id;
+        $data['number'] = Invoice::where('company_id', Auth::user()->current_company_id)->count() + 1;
+        $data['datum_zdanitelneho_plneni'] = $data['datum_vystaveni'];
+        $data['name'] = 'FA' . date('Y')  . $data['number'] . ' - ' . Client::find($data['client_id'])->company_name;
         return $data;
     }
 

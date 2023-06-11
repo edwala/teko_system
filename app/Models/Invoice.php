@@ -20,6 +20,22 @@ class Invoice extends Model
         'number',
         'name',
         'due_date',
+        'datum_vystaveni',
+        'datum_zdanitelneho_plneni',
+        'is_paid',
+        'paid_at',
+        'is_sent',
+        'sent_at',
+        'is_reminded',
+        'reminded_at',
+        'is_overdue',
+        'overdue_at',
+        'is_cancelled',
+        'cancelled_at',
+        'is_archived',
+        'archived_at',
+        'is_printed',
+        'printed_at',
     ];
 
     protected $searchableFields = ['*'];

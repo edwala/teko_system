@@ -13,6 +13,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Filters\DateRangeFilter;
 use App\Filament\Resources\InvoiceResource\Pages;
+use Illuminate\Support\Facades\URL;
 use JetBrains\PhpStorm\NoReturn;
 use Ramsey\Uuid\Type\Integer;
 
@@ -27,97 +28,198 @@ class InvoiceResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([
-            Card::make(['default' => 1])->schema([
-                Grid::make(['default' => 0])->schema([
-                    Select::make('client_id')
-                        ->rules(['exists:clients,id'])
-                        ->required()
-                        ->relationship('client', 'company_name')
-                        ->searchable()
-                        ->preload()
-                        ->placeholder('Client')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
-                        ]),
+        if(preg_match('/(edit)$/', URL::current()) OR preg_match('/(invoices\/[1-9]*)$/', URL::current())) {
+            return $form->schema([
+                Card::make(['default' => 1])->schema([
+                    Grid::make(['default' => 0])->schema([
+                        Select::make('client_id')
+                            ->rules(['exists:clients,id'])
+                            ->required()
+                            ->relationship('client', 'company_name')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Client')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
 
 
-                    TextInput::make('number')
-                        ->rules(['max:255', 'string'])
-                        ->required()
-                        ->placeholder('Number')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
-                        ]),
+                        TextInput::make('number')
+                            ->rules(['max:255', 'string'])
+                            ->required()
+                            ->disabled()
+                            ->placeholder('Number')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
 
-                    TextInput::make('name')
-                        ->rules(['max:255', 'string'])
-                        ->required()
-                        ->placeholder('Name')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
-                        ]),
+                        TextInput::make('name')
+                            ->rules(['max:255', 'string'])
+                            ->required()
+                            ->placeholder('Name')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
 
 
-                    DatePicker::make('due_date')
-                        ->rules(['date'])
-                        ->required()
-                        ->placeholder('Due Date')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
-                        ]),
+                        DatePicker::make('due_date')
+                            ->rules(['date'])
+                            ->required()
+                            ->placeholder('Due Date')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
 
-                    /*
-                    TextInput::make('cost')
-                        ->rules(['numeric'])
-                        ->numeric()
-                        ->placeholder('Cost without vat')
-                        ->required(),
-                    TextInput::make('total_cost')
-                        ->rules(['numeric'])
-                        ->numeric()
-                        ->placeholder('Total Cost')
-                        ->required(),
-                    TextInput::make('vat')
-                        ->rules(['numeric'])
-                        ->numeric()
-                        ->placeholder('VAT')
-                        ->default('21')
-                        ->required(),
-                    */
+                        DatePicker::make('datum_vystaveni')
+                            ->rules(['date'])
+                            ->required()
+                            ->disabled()
+                            ->placeholder('datum_vystaveni')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+
+                        DatePicker::make('datum_zdanitelneho_plneni')
+                            ->rules(['date'])
+                            ->required()
+                            ->disabled()
+                            ->placeholder('DUZP')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+
+                        /*
+                        TextInput::make('cost')
+                            ->rules(['numeric'])
+                            ->numeric()
+                            ->placeholder('Cost without vat')
+                            ->required(),
+                        TextInput::make('total_cost')
+                            ->rules(['numeric'])
+                            ->numeric()
+                            ->placeholder('Total Cost')
+                            ->required(),
+                        TextInput::make('vat')
+                            ->rules(['numeric'])
+                            ->numeric()
+                            ->placeholder('VAT')
+                            ->default('21')
+                            ->required(),
+                        */
+                    ]),
                 ]),
-            ]),
+            ]);
+        } else {
+            return $form->schema([
+                Card::make(['default' => 1])->schema([
+                    Grid::make(['default' => 0])->schema([
+                        Select::make('client_id')
+                            ->rules(['exists:clients,id'])
+                            ->required()
+                            ->relationship('client', 'company_name')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Client')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
 
-            Repeater::make('invoice_items')
-                ->schema([
-                    TextInput::make('name')->required(),
-                    TextInput::make('item_cost')
-                        ->rules(['numeric'])
-                        ->numeric()
-                        ->placeholder('Item Cost')
-                        ->required(),
-                    TextInput::make('count')
-                        ->rules(['numeric'])
-                        ->numeric()
-                        ->placeholder('Count')
-                        ->required(),
-                    TextInput::make('vat')
-                        ->rules(['numeric'])
-                        ->numeric()
-                        ->placeholder('VAT')
-                        ->default('21')
-                        ->required(),
-                ])
-                ->columns(4)
-        ]);
+
+                        /*
+
+                        TextInput::make('number')
+                            ->rules(['max:255', 'string'])
+                            ->required()
+                            ->placeholder('Number')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+                        */
+
+                        /*
+                        TextInput::make('name')
+                            ->rules(['max:255', 'string'])
+                            ->required()
+                            ->placeholder('Name')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+                        */
+
+
+                        DatePicker::make('due_date')
+                            ->rules(['date'])
+                            ->required()
+                            ->placeholder('Due Date')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+
+                        DatePicker::make('datum_vystaveni')
+                            ->rules(['date'])
+                            ->required()
+                            ->placeholder('datum_vystaveni')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+
+                        DatePicker::make('datum_zdanitelneho_plneni')
+                            ->rules(['date'])
+                            ->disabled()
+                            ->placeholder('DUZP')
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 12,
+                                'lg' => 12,
+                            ]),
+                    ]),
+                ]),
+
+                Repeater::make('invoice_items')
+                    ->schema([
+                        TextInput::make('name')->required(),
+                        TextInput::make('item_cost')
+                            ->rules(['numeric'])
+                            ->numeric()
+                            ->placeholder('Item Cost')
+                            ->required(),
+                        TextInput::make('count')
+                            ->rules(['numeric'])
+                            ->numeric()
+                            ->placeholder('Count')
+                            ->required(),
+                        TextInput::make('vat')
+                            ->rules(['numeric'])
+                            ->numeric()
+                            ->placeholder('VAT')
+                            ->default('21')
+                            ->required(),
+                    ])
+                    ->columns(4)
+            ]);
+        }
     }
 
     public static function table(Table $table): Table
