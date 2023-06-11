@@ -178,6 +178,7 @@ class InvoiceResource extends Resource
                         DatePicker::make('datum_vystaveni')
                             ->rules(['date'])
                             ->required()
+                            ->default(now())
                             ->placeholder('datum_vystaveni')
                             ->columnSpan([
                                 'default' => 12,
